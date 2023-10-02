@@ -1,0 +1,706 @@
+/* CSS reset */
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+/* Remove arrows from all number input fields */
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Remove underline from almost all buttons name */
+a{
+    text-decoration: none;
+}
+                                           /* For large screens */
+/* Style home page layout */
+html{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+}
+body{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    grid-template-areas: 
+    'header'
+    'info'
+    'navbar'
+    'amount'
+    'box'
+    'add-btn'
+    'calculation'
+    'help'
+    'footer';
+    position: relative;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    overflow: auto;
+}
+/* Style header */
+.header{
+    grid-area: header;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 0;
+    background-color: blue;
+    color: white;
+}
+.title{
+    font-family: 'Anton', sans-serif;
+}
+/* Style date and time container */
+.info{
+    grid-area: info;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0.4rem 0;
+    background-color: gray;
+    color: white;
+}
+.reel{
+    display: none;
+}
+/* Style navbar */
+.navbar{
+    grid-area: navbar;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1.7rem 0;
+    color: blue;
+}
+.account-name{
+    cursor: default;
+    max-width: 35vw;
+}
+.nav-btn{
+    border: 1px solid blue;
+    color: blue;
+    border-radius: 5px;
+    padding: 0.2rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in 0s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+.nav-btn:hover{
+    background-color: blue;
+    color: white;
+}
+.burger{
+    display: none;
+}
+/* Style total amount container */
+.amount-box{
+    grid-area: amount;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#amount{
+    margin-left: 2rem;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid blue;
+    font-size: 1.8rem;
+    text-align: center;
+}
+/* Style for disable elements */
+.disable-btn{
+    grid-area: add-btn;
+    opacity: 0.5;
+    margin: 2.5rem 1.5rem;
+}
+.disable-help{
+    opacity: 0.5;
+}
+.disable-help:hover{
+    color: blue;
+    background-color: white;
+}
+/* Style tables */
+table{
+    grid-area: box;
+    margin: 0 1.6rem;
+    font-weight: bold;
+    counter-reset: serial-number;
+}
+.top{
+    margin-top: 2rem;
+}
+td{
+    padding: 1.4rem;
+    text-align: center;
+}
+.sr,.name,.itemprice,.edit-btn,.remove-btn{
+    width: 10%;
+}
+.sr::before{
+    counter-increment: serial-number;
+    content: counter(serial-number);
+}
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1rem 0;
+    color: white;
+    background-color: blue;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.btn:hover{
+    background-color: rgb(0, 0, 235);
+}
+.small-btn{
+    width: 10vw;
+    font-weight: lighter;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.1rem 0;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.edit{
+    background-color: blue;
+}
+.view{
+    background-color: blue;
+}
+.gray-btn{
+    background-color: #ef1414;
+}
+.gray-btn:hover{
+    background-color: #ef1414;
+}
+/* Style add button */
+.add-btn{
+    grid-area: add-btn;
+    margin: 2.5rem 1.5rem;
+}
+/* Style calculation container */
+.calculation{
+    grid-area: calculation;
+    display: grid;
+    grid-template-areas: 
+    'value remAmount price-btn'
+    'value remAmount price-btn'
+    'value remAmount price-btn';
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+}
+.value{
+    margin: 0 1.3rem;
+}
+.font{
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+.value-heading{
+    grid-area: vhead;
+}
+.value-price{
+    grid-area: vprice;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: default;
+    border-bottom: 2px solid blue;
+    text-align: center;
+}
+.rem-price{
+    grid-area: vprice;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: default;
+    border-bottom: 2px solid blue;
+    text-align: center;
+}
+.price-btn{
+    grid-area: price-btn;
+    margin: 0;
+    padding: 0;
+    margin-right: 0.5rem;
+}
+.save-btn{
+    border: none;
+    outline: none;
+    font-size: 1rem;
+}
+/* Style helping tool container */
+.help{
+    grid-area: help;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+.help-box{
+    width: 80%;
+    height: 0;
+    overflow: hidden;
+    text-align: center;
+}
+.open{
+    height: unset;
+}
+.itemHeading{
+    padding: 1.5rem 0;
+}
+.itemForm{
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 1.4rem;
+}
+.inputItem{
+    outline: none;
+    border: none;
+    border-bottom: 2px solid blue;
+    text-align: center;
+    font-size: 1.2rem;
+}
+.calculate-btn{
+    padding: 0.3rem 1rem;
+    color: white;
+    background-color: blue;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.calculate-btn:hover{
+    background-color: rgb(0, 0, 235);
+}
+.text{
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-top: 2rem;
+}
+.delete-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.delete-btn{
+    color: white;
+    background-color: #ef1414;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.5rem 1.2rem;
+    margin-top: 2.5rem;
+}
+/* Style footer */
+footer{
+    grid-area: footer;
+    padding: 0.1rem;
+    text-align: center;
+    background-color: black;
+    color: white;
+    position: relative;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Style signup/login/add-item/edit-item/delete-account forms */
+.container{
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    display: none;
+    z-index: 1;
+}
+.modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: inherit;
+    width: inherit;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+.modal::before{
+    content: " ";
+    background-color: black;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+    z-index: -1;
+}
+.note{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    border-radius: 10px;
+    background-color: white;
+    padding: 2rem;
+    width: 30%;
+}
+h3{
+    text-align: center;
+}
+.cover{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+.cover input{
+    text-align: center;
+}
+.delCover{
+    flex-direction: column;
+    width: 100%;
+}
+.buttonBox{
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.add-text{
+    padding: 0.2rem;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid blue;
+}
+.btn-blue{
+    border-radius: 5px;
+    border: none;
+    padding: 0.1rem 1rem;
+}
+.btn-white{
+    grid-area: btn-white;
+    background-color: white;
+    border: 1px solid blue;
+    color: blue;
+    border-radius: 5px;
+    padding: 0.1rem 1rem;
+}
+.btn-white:hover{
+    background-color: white;
+}
+/* Style history page layout */
+.helpPlus{
+    margin: 0;
+}
+.helpHistory{
+    margin-bottom: 1rem;
+}
+/* Style heading of history page */
+.list{
+    grid-area: navbar;
+    text-align: center;
+    width: 100vw;
+    padding: 2.9rem 0;
+
+}
+/* Style date column of table in history page */
+.dateBlock{
+    text-align: left;
+}
+/* Style bill page layout */
+.calenderBar{
+    grid-area: navbar;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 3rem;
+}
+.totalPrice{
+    grid-area: amount;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3rem;
+}
+.data{
+    grid-area: calculation;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 3rem;
+}
+                                          /* For medium screens */
+@media only screen and (max-width: 1346px) {
+    /* Style calculation container */
+    .calculation{
+        grid-template-areas: 
+        'value'
+        'remAmount'
+        'price-btn';
+        gap: 2rem;
+        padding-left: 1.5rem;
+        padding-right: 0.5rem;
+    }
+    .value{
+        grid-area: value;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        grid-template-areas: 
+        'vhead . vprice vprice vprice vprice vprice vprice vprice vprice vprice'
+        'vhead . vprice vprice vprice vprice vprice vprice vprice vprice vprice';
+    }
+    .remAmount{
+        grid-area: remAmount;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        grid-template-areas: 
+        'vhead vprice vprice'
+        'vhead vprice vprice';
+    }
+    .price-btn{
+        margin: 0;
+        font-size: 1.5rem;
+        margin-top: 1rem;
+    }
+    /* Style lables of create-account, login, add, edit and delete-account forms */
+    .cover{
+        flex-direction: column;
+    }
+    /* Style form in helping tool */
+    .itemForm{
+        flex-direction: column;
+        gap: 2rem;
+    }
+    /* Style bill page layout */
+    .calenderBar,.data{
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+@media only screen and (max-width: 940px){
+    /* Style remaining amount section */
+    .remAmount{
+        grid-template-areas: 
+        'vhead vprice'
+        'vhead vprice';
+    }
+    /* Style create-account, login, add, edit and delete-account forms */
+    .note{
+        width: 40%;
+    }
+} 
+                                          /* For small screens */
+@media only screen and (max-width: 706px){
+    /* Style total amount form */
+    .amount-box{
+        flex-direction: column;
+    }
+    #amount{
+        margin: 0;
+        margin-top: 1rem;
+    }
+    /* Style form in calculation container */
+    .value{
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        grid-template-areas: 
+        '.    .     .     .    .    .    .      vhead  .     .    .    .    '
+        '.    .     .     .    .    .    vprice vprice vprice.    .    .    ';
+    }
+    .remAmount{
+        grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        grid-template-areas: 
+        '.    .     .    .    .    .    .      vhead  .     .    .    .    '
+        '.    .     .    .    .    .    vprice vprice vprice.    .    .    ';
+    }
+    .value-price{
+        margin-top: 1rem;
+    }
+    .rem-price{
+        margin-top: 1rem;
+    }
+    /* Style create-account, login, add, edit and delete-account forms */
+    .note{
+        width: 50%;
+    }
+    /* Style date column of table in history page */
+    .dateBlock{
+        text-align: center;
+        padding: 1.4rem 0; 
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 673px){
+    /* Style navbar */
+    .navbar{
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        padding-bottom: 1.7rem;
+    }
+    .account-name{
+        max-width: 65vw;
+    }
+    .logout,.history-btn{
+        display: none;
+    }
+    .burger{
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .menu{
+        overflow: hidden;
+        transition: all 0.1s linear 0s;
+        height: 0;
+        width: 0;
+        position: absolute;
+        right: 20px;
+        top: 19px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    .naturalHeight{
+        height: 67px;
+        width: 140px;
+    }
+    .account2,.logout2,.history-btn2{
+        border: none;
+        border-radius: unset;
+    }
+    /* Style table */
+    table{
+        border: 1px solid gray;
+        border-radius: 10px;
+        margin: 0 0.6rem;
+    }
+    tr{
+        background-color: gray;
+    }
+    td{
+        background-color: white;
+    }
+    .sr{
+        border-right: 1px solid gray;
+        width: 8%;
+    }
+    .name{
+        border-right: 1px solid gray;
+    }
+    .itemprice{
+        border-right: 1px solid gray;
+    }
+    .edit-btn{
+        padding-left: 0.3rem;
+    }
+    .remove-btn{
+        padding-right: 0.3rem;
+    }
+    /* Style item-name container in helping tool */
+    .name-container,.amount-container{
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+}
+@media only screen and (max-width: 570px){
+    /* Style create-account, login, add, edit and delete-account forms */
+    .note{
+        width: 70%;
+    }
+}
+                                         /* For smaller screens */
+@media only screen and (max-width: 432px){
+    /* Style date and time container */
+    .info{
+        justify-content: unset;
+        padding: 1rem 0;
+        overflow: hidden;
+    }
+    .bigSpan{
+        display: none;
+    }
+    .reel{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        left: 0;
+        animation: slider 30s ease-in-out 0s infinite normal;
+    }
+    .reel span{
+        width: 100vw;
+        height: 100%;
+        text-align: center;
+    }
+    @keyframes slider{
+        0%{
+            left: 50vw;
+        }
+        25%{
+            left: 0;
+        }
+        50%{
+            left: -100vw;
+        }
+        75%{
+            left: -200vw;
+        }
+        100%{
+            left: -250vw;
+        }
+    }
+    /* Change font of total-amount form */
+    #amount{
+        font-size: 1.1rem;
+    }
+    /* Style columns of table in home page */
+    td{
+        padding: 1.4rem 0.1rem;
+    }
+    .edit-btn,.remove-btn{
+        width: 1%;
+    }
+    .name:not(.dateBlock),.itemprice{
+        width: 20%;
+    }
+    /* Style some fonts */
+    .font,.value-price,.rem-price,.itemForm,.inputItem,.text{
+        font-size: 1.1rem;
+    }
+    /* Style create-account, login, add, edit and delete-account forms */
+    .note{
+        width: 90%;
+    }
+    /* Style some fonts in bill page */
+    .calenderBar h2,.totalPrice h2,.data h2{
+        font-size: 1rem;
+    }
+}

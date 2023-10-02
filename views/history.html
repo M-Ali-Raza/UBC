@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBC | Utility Bill Calculator</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+                                          <!-- History Page -->
+    <!-- Header Section -->
+
+    <div class="header">
+        <h1 class="title">UBC</h1>
+        <h2>Utility Bill Calculator</h2>
+    </div>
+
+    <!-- Date And Time Section -->
+
+    <div class="info">
+        <span id="time-box" class="bigSpan"></span>
+        <span id="date-box" class="bigSpan"></span>
+        <span id="day-box" class="bigSpan"></span>
+        <div class="reel">
+            <span id="time-box2"></span>
+            <span id="date-box2"></span>
+            <span id="day-box2"></span>
+        </div>
+    </div>
+
+    <!-- Page Title -->
+
+    <h1 class="list">Bill History</h1>
+    
+    <!-- Table Section (For Bill History) -->
+
+    <% if(userid == true){ %>
+    <% if(user.billlist.length!=0){ %>
+    <table>
+        <% user.billlist.forEach((y)=>{ %>
+        <tr>
+            <td class="sr"></td>
+            <% y.createdDate %>
+            <% let months=['January','Faburary','March','April','May','June','July','August','September','October','November','December'] %>
+            <% let year=y.createdDate.getFullYear() %>
+            <% let month=months[y.createdDate.getMonth()] %>
+            <% let date=y.createdDate.getDate() %>
+            <% let dateFormat=`${date} ${month} ${year}` %>
+            <td class="name dateBlock"><%= dateFormat %></td>
+            <td class="edit-btn"><a href="/view/<%= y._id %>" class="small-btn view"> View </a></td>
+            <td class="remove-btn"><a href="/deleteBill/<%= y._id %>" class="gray-btn small-btn">Delete</a></td>
+        </tr>
+        <% }) %>
+    </table>
+    <% } %>
+    <% } %>
+
+    <!-- Extra Elements For Page Setting -->
+
+    <div class="add-btn helpPlus"></div>
+    <div class="calculation"></div>
+    <div class="help helpHistory"></div>
+
+    <!-- Footer Section -->
+    
+    <footer>Copyright &copy; 2023 UBC Created By Muhammad Ali Raza | All Rights Reserved!</footer>
+</body>
+<script src="./js/script.js"></script>
+</html>

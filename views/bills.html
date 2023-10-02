@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBC | Utility Bill Calculator</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+                                             <!-- Bill Page -->
+    <!-- Header Section -->
+
+    <div class="header">
+        <h1 class="title">UBC</h1>
+        <h2>Utility Bill Calculator</h2>
+    </div>
+
+    <!-- Date And Time Section -->
+
+    <div class="info">
+        <span id="time-box" class="bigSpan"></span>
+        <span id="date-box" class="bigSpan"></span>
+        <span id="day-box" class="bigSpan"></span>
+        <div class="reel">
+            <span id="time-box2"></span>
+            <span id="date-box2"></span>
+            <span id="day-box2"></span>
+        </div>
+    </div>
+
+    <!-- Save Date And Time Section -->
+
+    <% if(userid == true){ %>
+    <% let index=user.billlist.map(obj=>obj.id).indexOf(readQuery) %>
+    <% user.billlist[index].createdDate %>
+    <% let months=['January','Faburary','March','April','May','June','July','August','September','October','November','December'] %>
+    <% let dayname=['Sunday','Monday','Teusday','Wednesday','Thursday','Friday','Saturday'] %>
+    <% let year=user.billlist[index].createdDate.getFullYear() %>
+    <% let month=months[user.billlist[index].createdDate.getMonth()] %>
+    <% let date=user.billlist[index].createdDate.getDate() %>
+    <% let day=dayname[user.billlist[index].createdDate.getDay()] %>
+    <% let dateFormat=`${date} ${month} ${year}` %>
+    <div class="calenderBar">
+        <h2>Day : <%= day %></h2>
+        <h2>Date : <%= dateFormat %></h2>
+    </div>
+
+    <!-- Save Total Amount Section -->
+
+    <div class="totalPrice">
+        <h2>Total Amount : <%= user.billlist[index].totalAmount %> Rs</h2>
+    </div>
+
+    <!-- Table Section (For Save Bills) -->
+
+    <table>
+        <% user.billlist[index].itemlist.forEach((y)=>{ %>
+        <tr>
+            <td class="sr"></td>
+            <td class="name"><%= y.itemname %></td>
+            <td class="itemprice"><span class="priceNum"><%= y.price %></span> Rs</td>
+        </tr>
+        <% }) %>
+    </table>
+
+    <!-- Save Spent Amount and Remaining Amount Section -->
+
+    <div class="data">
+        <h2>Spent Amount : <%= user.billlist[index].spentPrice %> Rs</h2>
+        <h2>Remaining Amount : <%= user.billlist[index].remPrice %> Rs</h2>
+    </div>
+    <% } %>
+
+    <!-- Footer Section -->
+    
+    <footer>Copyright &copy; 2023 UBC Created By Muhammad Ali Raza | All Rights Reserved!</footer>
+</body>
+<script src="/js/script.js"></script>
+</html>

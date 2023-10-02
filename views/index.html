@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBC | Utility Bill Calculator</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+                                           <!-- Main Home Page -->
+    <!-- Header Section -->
+    
+    <div class="header">
+        <h1 class="title">UBC</h1>
+        <h2>Utility Bill Calculator</h2>
+    </div>
+    
+    <!-- Date and Time Section -->
+    
+    <div class="info">
+        <span id="time-box" class="bigSpan"></span>
+        <span id="date-box" class="bigSpan"></span>
+        <span id="day-box" class="bigSpan"></span>
+        <div class="reel">
+            <span id="time-box2"></span>
+            <span id="date-box2"></span>
+            <span id="day-box2"></span>
+        </div>
+    </div>
+    
+    <!-- Navbar Section -->
+    
+    <div class="navbar">
+        <% if(userid == false){ %>
+        <span class="nav-btn account">Create Account</span>
+        <span class="nav-btn login">Log In</span>
+        <% }else{ %>
+        <% if(user){ %>
+        <h3 class="account-name"><%= user.username %></h3>
+        <% } %>
+        <a href="/logout" class="nav-btn logout">Log Out</a>
+        <a href="/history" class="nav-btn history-btn">Bill History</a>
+        <div class="burger">
+            <span class="material-symbols-outlined burger-icon">Menu</span>
+            <div class="menu">
+                <a href="/history" class="nav-btn history-btn2">Bill History</a>
+                <a href="/logout" class="nav-btn logout2">Log Out</a>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    
+    <!-- Form To Add Total Amount -->
+    
+    <form action="/addAmount" method="post" class="amount-box">
+        <label for="amount" class="font">Total Amount : </label>
+        <% if(userid == false){ %>
+        <input type="number" name="amount" id="amount" readonly placeholder="Please login first!">
+        <% }else{ %>
+        <% if(user.totalAmount === 0 || user.totalAmount === null){ %>
+        <input type="number" name="amount" id="amount" placeholder="Enter your total amount">
+        <% }else{ %>
+        <input type="number" name="amount" id="amount" value="<%= user.totalAmount %>">
+        <% } %>
+        <% } %>
+    </form>
+    
+    <!-- Table Section -->
+
+    <% if(userid == true){ %>
+    <% if(user.liveTable.length!=0){ %>
+    <table class="top">
+        <% user.liveTable.forEach((y)=>{ %>
+        <tr>
+            <td class="sr"></td>
+            <td class="name"><%= y.itemname %></td>
+            <td class="itemprice"><span class="priceNum"><%= y.price %></span> Rs</td>
+            <td class="edit-btn"><a href="/edit/<%= y.itemname %>" class="small-btn edit"> Edit </a></td>
+            <td class="remove-btn"><a href="/deleteItem/<%= y.itemname %>" class="gray-btn small-btn">Delete</a></td>
+        </tr>
+        <% }) %>
+    </table>
+    <% } %>
+    <% } %>
+    
+    <!-- Add Items Button -->
+
+    <% if(!user){ %>
+    <div class="disable-btn btn font">+</div>
+    <% }else{ %>
+    <% if(user.totalAmount === 0 || user.totalAmount === null){ %>
+    <div class="disable-btn btn font">+</div>
+    <% }else{ %>
+    <div class="add-btn btn font">+</div>
+    <% } %>
+    <% } %>
+
+    <!-- Spent Amount and Remaining Amount Section -->
+
+    <% if(userid==true){ %>
+    <% let sum=0 %>
+    <% user.liveTable.forEach((y)=>{ %>
+    <% sum+=y.price %>
+    <% }) %>
+    <% if(user.liveTable.length!=0){ %>
+    <form action="/save" method="post" class="calculation">
+        <div class="value font">
+            <label for="spentPrice" class="value-heading">Spent Amount: </label>
+            <input type="number" name="spentPrice" id="spentPrice" class="value-price" value="<%= sum %>" readonly>
+        </div>
+        <div class="font remAmount">
+            <label for="remPrice" class="value-heading">Remaining Amount: </label>
+            <% let remAmount=user.totalAmount-sum %>
+            <input type="number" name="remPrice" id="remPrice" class="rem-price" value="<%= remAmount %>" readonly>
+        </div>
+        <button type="submit" class="price-btn btn save-btn notify">Save Bill</button>
+    </form>
+    <% }else{ %>
+    <form action="/save" method="post" class="calculation" onsubmit="return false">
+        <div class="value font">
+            <label for="spentPrice" class="value-heading">Spent Amount: </label>
+            <input type="number" name="spentPrice" id="spentPrice" class="value-price" readonly>
+        </div>
+        <div class="font remAmount">
+            <label for="remPrice" class="value-heading">Remaining Amount: </label>
+            <input type="number" name="remPrice" id="remPrice" class="rem-price" readonly>
+        </div>
+        <button type="submit" class="price-btn btn save-btn disable-btn">Save Bill</button>
+    </form>
+    <% } %>
+    <% }else{ %>
+    <form action="/save" method="post" class="calculation" onsubmit="return false">
+        <div class="value font">
+            <label for="spentPrice" class="value-heading">Spent Amount: </label>
+            <input type="number" name="spentPrice" id="spentPrice" class="value-price" readonly>
+        </div>
+        <div class="font remAmount">
+            <label for="remPrice" class="value-heading">Remaining Amount: </label>
+            <input type="number" name="remPrice" id="remPrice" class="rem-price" readonly>
+        </div>
+        <button type="submit" class="price-btn btn save-btn disable-btn">Save Bill</button>
+    </form>
+    <% } %>
+
+    <!-- Helping Tool Section -->
+
+    <div class="help">
+        <% if(!user){ %>
+        <span class="nav-btn disable-help">Helping Tool <span class="material-symbols-outlined more">Expand_More</span></span>
+        <% }else{ %>
+        <% let sum=0 %>
+        <% let currentSum=0 %>
+        <% user.liveTable.forEach((y)=>{ %>
+        <% sum+=y.price %>
+        <% }) %>
+        <% let realSpentPrice=user.totalAmount-user.realRemPrice %>
+        <% let realPrice=realSpentPrice-sum %>
+        <% if(user.totalAmount === 0 || user.totalAmount === null || user.liveTable.length==0){ %>
+        <span class="nav-btn disable-help">Helping Tool <span class="material-symbols-outlined more">Expand_More</span></span>
+        <% }else{ %>
+        <% if(user.lostItem!='' && user.lostItem!=0 && user.realRemPrice!=null &&user.realRemPrice!=0 && user.liveTable.length!=0){ %>
+        <a href="/clearFields" class="nav-btn">Helping Tool <span class="material-symbols-outlined more">Expand_Less</span></a>
+        <% currentSum=sum %>
+        <% }else{ %>
+        <span class="nav-btn help-btn">Helping Tool <span class="material-symbols-outlined more">Expand_More</span></span>
+        <% } %>
+        <% } %>
+        <% } %>
+
+        <!-- Help Box Section -->
+
+        <% if(user){ %>
+        <% let sum=0 %>
+        <% user.liveTable.forEach((y)=>{ %>
+        <% sum+=y.price %>
+        <% }) %>
+        <% let realSpentPrice=user.totalAmount-user.realRemPrice %>
+        <% let realPrice=realSpentPrice-sum %>
+        <% if(user.lostItem!='' && user.lostItem!=0 && user.realRemPrice!=null &&user.realRemPrice!=0 && user.liveTable.length!=0){ %>
+        <div class="help-box open">
+            <div class="findItem">
+                <h2 class="itemHeading">Find Item Price</h2>
+
+                <!-- Form To Add Item Name and Actual Remaining Amount -->
+
+                <form action="/help" method="post" class="itemForm">
+                    <div class="name-container">
+                        <label for="newItem-name">Item Name: </label>
+                        <input type="text" name="lostItem" id="newItem-name" class="inputItem" value="<%= user.lostItem %>">
+                    </div>
+                    <div class="amount-container">
+                        <label for="realRem-amount">Actual Remaining Amount: </label>
+                        <input type="number" name="realRemPrice" id="realRem-amount" class="inputItem" value="<%= user.realRemPrice %>">
+                    </div>
+                    <button type="submit" class="calculate-btn">Calculate</button>
+                </form>
+
+                <!-- Section Which Shows Name Of Item And Actual Price Of Item -->
+
+                <div class="text">The price of <%= user.lostItem %> is <%= realPrice %> Rs and actual spent amount is <%= realSpentPrice %> Rs.</div>
+            </div>
+
+            <!-- Delete Account Button -->
+
+            <% if(userid==true){ %>
+            <div class="delete-box">
+                <div class="delete-btn">Delete My Account</div>
+            </div>
+            <% } %>
+        </div>
+        <% }else{ %>
+        <div class="help-box">
+            <div class="findItem">
+                <h2 class="itemHeading">Find Item Price</h2>
+                <form action="/help" method="post" class="itemForm">
+                    <div class="name-container">
+                        <label for="newItem-name">Item Name: </label>
+                        <input type="text" name="lostItem" id="newItem-name" class="inputItem" placeholder="Type here">
+                    </div>
+                    <div class="amount-container">
+                        <label for="realRem-amount">Actual Remaining Amount: </label>
+                        <input type="number" name="realRemPrice" id="realRem-amount" class="inputItem" placeholder="Type here">
+                    </div>
+                    <button type="submit" class="calculate-btn">Calculate</button>
+                </form>
+            </div>
+            <% if(userid==true){ %>
+            <div class="delete-box">
+                <div class="delete-btn">Delete My Account</div>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+        <% } %>
+    </div>
+
+    <!-- Footer Section -->
+
+    <footer>Copyright &copy; 2023 UBC Created By Muhammad Ali Raza | All Rights Reserved!</footer>
+
+                                            <!-- Forms -->
+    <!-- Sign-Up Form -->
+
+    <div class="container signup_container">
+        <div class="modal">
+            <form onsubmit=" return matchPassword()" action="/signup" method="post" class="note">
+                <h3>Create Account</h3>
+                <div class="cover">
+                    <label for="email" class="lable1">Username:</label>
+                    <input type="text" name="username" id="email" class="add-text" placeholder="Enter your Username" required>
+                </div>
+                <div class="cover">
+                    <label for="pass" class="lable2">Password:</label>
+                    <input type="password" name="password" id="pass" class="add-text" placeholder="Enter your password" required>
+                </div>
+                <div class="cover">
+                    <label for="pass2" class="lable3">Confirm Password:</label>
+                    <input type="password" name="confirmPassword" id="pass2" class="add-text" placeholder="Enter password again" required>
+                </div>
+                <div class="buttonBox">
+                    <button type="submit" class="btn btn-blue btn-submit">Create</button>
+                    <button type="button" class="btn btn-white">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Log-In Form -->
+
+    <div class="container login_container">
+        <div class="modal">
+            <form action="/login" method="post" class="note">
+                <h3>Log In</h3>
+                <div class="cover">
+                    <label for="email2" class="lable1">Username:</label>
+                    <input type="text" name="username" id="email2" class="add-text" placeholder="Enter your Username" required>
+                </div>
+                <div class="cover">
+                    <label for="pass3" class="lable2">Password:</label>
+                    <input type="password" name="password" id="pass3" class="add-text" placeholder="Enter your password" required>
+                </div>
+                <div class="buttonBox">
+                    <button type="submit" class="btn btn-blue btn-submit">Log In</button>
+                    <button type="button" class="btn btn-white">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Form -->
+
+    <div class="container delete_container">
+        <div class="modal">
+            <form action="/deleteAccount" method="post" class="note">
+                <h3>Delete Account Confrmation</h3>
+                <div class="cover delCover">
+                    <% if(userid==true){ %>
+                    <label for="email2" class="lable1">Retype <strong>"<%= user.username %>"</strong> to delete your account :</label>
+                    <% } %>
+                    <input type="text" name="username" id="email3" class="add-text" placeholder="Enter your Username" required>
+                </div>
+                <div class="buttonBox">
+                    <button type="submit" class="btn btn-blue btn-submit gray-btn">Delete</button>
+                    <button type="button" class="btn btn-white">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Items Form -->
+    
+    <div class="container additem_container">
+        <div class="modal">
+            <form action="/addItems" method="post" class="note itemPost">
+                <h3>Add New Item</h3>
+                <div class="cover">
+                    <label for="item" class="lable1">Item:</label>
+                    <input type="text" name="item" id="item" class="add-text" placeholder="Enter item name" required>
+                </div>
+                <div class="cover">
+                    <label for="price" class="lable2">Price:</label>
+                    <input type="number" name="price" id="price" class="add-text" placeholder="Enter item price" required>
+                </div>
+                <div class="buttonBox">
+                    <button type="submit" class="btn btn-blue btn-submit">Add</button>
+                    <button type="button" class="btn btn-white">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="/js/script.js"></script>
+</html>
