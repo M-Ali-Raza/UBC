@@ -10,12 +10,20 @@ var passport=require("passport");
 var LocalStrategy=require("passport-local");
 const User=require("./models/User");
 // Connect our server with mongo-DB using mongoose
-mongoose.connect(process.env.SECRET);
-var db=mongoose.connection;
-db.on('error',console.error.bind(console,'connection error:'));
-db.once('open',function(){
+const connectDB=async()=>{
+    mongoose.connect(process.env.SECRET);
+    var db=await mongoose.connection;
+    db.on('error',console.error.bind(console,'connection error:'));
+    db.once('open',function(){
     console.log("We connect with database successfully!");
 });
+}
+// mongoose.connect(process.env.SECRET);
+// var db=mongoose.connection;
+// db.on('error',console.error.bind(console,'connection error:'));
+// db.once('open',function(){
+//     console.log("We connect with database successfully!");
+// });
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -225,6 +233,11 @@ app.get("/deleteBill/:id", async (req,res)=>{
     return res.redirect('/history');
 });
 // Start the server
-app.listen(port,()=>{
-    console.log(`The application started successfully!`)
+connectDB().then(()=>{
+    app.listen(port,()=>{
+        console.log(`The application started successfully!`)
+    })
 })
+// app.listen(port,()=>{
+//     console.log(`The application started successfully!`)
+// })
