@@ -2,7 +2,7 @@ require('dotenv').config()
 const express=require("express");
 const path=require("path");
 const app=express();
-const port=process.env.PORT;
+const port=process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
 var mongoose=require("mongoose");
 var bodyParser=require("body-parser");
