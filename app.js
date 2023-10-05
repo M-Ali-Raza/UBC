@@ -11,19 +11,17 @@ var LocalStrategy=require("passport-local");
 const User=require("./models/User");
 // Connect our server with mongo-DB using mongoose
 const connectDB=async()=>{
-    mongoose.connect(process.env.SECRET);
-    var db=await mongoose.connection;
-    db.on('error',console.error.bind(console,'connection error:'));
-    db.once('open',function(){
-    console.log("We connect with database successfully!");
-});
+    try{
+        mongoose.connect(process.env.SECRET);
+        var db=await mongoose.connection;
+        db.on('error',console.error.bind(console,'connection error:'));
+        db.once('open',function(){
+            console.log("We connect with database successfully!");
+        });
+    }catch(error){
+        console.log(error)
+    }
 }
-// mongoose.connect(process.env.SECRET);
-// var db=mongoose.connection;
-// db.on('error',console.error.bind(console,'connection error:'));
-// db.once('open',function(){
-//     console.log("We connect with database successfully!");
-// });
 // Middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -53,23 +51,31 @@ app.get("/",(req,res)=>{
         'Access-control-Allow-Origin':'*'
     });
     let userid=req.isAuthenticated()
-    res.status(200).render('index.html',{
-        userid,user:req.user
-    })
+    try{
+        res.status(200).render('index.html',{
+            userid,user:req.user
+        })
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/signup",async (req,res)=>{
-    const existingUser= await User.findOne({username:req.body.username});
-    if(existingUser){
-        return res.status(400).json({message:"User already exist"});
-    }
-    else{
-        const hashedpassword= await bcrypt.hash(req.body.password,10)
-        const user = await User.create({
-            username: req.body.username,
-            password: hashedpassword,
-        });
-        console.log("Account is created successfully!")
-        return res.redirect('/')
+    try{
+        const existingUser= await User.findOne({username:req.body.username});
+        if(existingUser){
+            return res.status(400).json({message:"User already exist"});
+        }
+        else{
+            const hashedpassword= await bcrypt.hash(req.body.password,10)
+            const user = await User.create({
+                username: req.body.username,
+                password: hashedpassword,
+            });
+            console.log("Account is created successfully!")
+            return res.redirect('/')
+        }
+    }catch(error){
+        console.log(error)
     }
 });
 app.post("/login",async (req,res)=>{
@@ -95,142 +101,194 @@ app.post("/login",async (req,res)=>{
     }
 });
 app.get("/logout", function (req, res) {
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        console.log("We logout successfully!");
-        res.redirect('/');
-    });
+    try{
+        req.logout(function(err) {
+            if (err) { return next(err); }
+            console.log("We logout successfully!");
+            res.redirect('/');
+        });
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/deleteAccount", async (req,res)=>{
-    if(req.body.username===req.user.username){
-        const user= await User.deleteOne({username:req.user.username});
-        console.log("Your account deleted successfully!")
-        res.redirect('/');
-    }
-    else{
-        res.status(400).json({error:"Invalid username"})
+    try{
+        if(req.body.username===req.user.username){
+            const user= await User.deleteOne({username:req.user.username});
+            console.log("Your account deleted successfully!")
+            res.redirect('/');
+        }
+        else{
+            res.status(400).json({error:"Invalid username"})
+        }
+    }catch(error){
+        console.log(error)
     }
 });
 app.post("/addAmount", async (req,res)=>{
-    const user= await User.updateOne({username:req.user.username},{
-        totalAmount: req.body.amount
-    })
-    console.log("Total amount added successfully!");
-    res.redirect('/');
+    try{
+        const user= await User.updateOne({username:req.user.username},{
+            totalAmount: req.body.amount
+        })
+        console.log("Total amount added successfully!");
+        res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/addItems", async (req,res)=>{
-    const user= await User.updateOne({username:req.user.username},{
-        $push:{
-            liveTable: {
-                itemname: req.body.item,
-                price: req.body.price
+    try{
+        const user= await User.updateOne({username:req.user.username},{
+            $push:{
+                liveTable: {
+                    itemname: req.body.item,
+                    price: req.body.price
+                }
+            },
+            $unset:{
+                lostItem: req.user.lostItem,
+                realRemPrice: req.user.realRemPrice
             }
-        },
-        $unset:{
-            lostItem: req.user.lostItem,
-            realRemPrice: req.user.realRemPrice
-        }
-    })
-    console.log("Item added successfully!");
-    return res.redirect('/');
+        })
+        console.log("Item added successfully!");
+        return res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/edit/:id",async (req,res)=>{
     let readQuery=req.params.id
-    const user= await User.findOneAndUpdate({'liveTable':{$elemMatch:{'itemname':readQuery}}},{
-        $set:{
-            'liveTable.$.itemname':req.body.item,
-            'liveTable.$.price':req.body.price
-        },
-        $unset:{
-            lostItem: req.user.lostItem,
-            realRemPrice: req.user.realRemPrice
-        }
-    },{new:true}).then(docs=>{
-        let userid=req.isAuthenticated()
-        res.render('edit.html',{club:docs,userid,user:req.user,readQuery})
-    })
+    try{
+        const user= await User.findOneAndUpdate({'liveTable':{$elemMatch:{'itemname':readQuery}}},{
+            $set:{
+                'liveTable.$.itemname':req.body.item,
+                'liveTable.$.price':req.body.price
+            },
+            $unset:{
+                lostItem: req.user.lostItem,
+                realRemPrice: req.user.realRemPrice
+            }
+        },{new:true}).then(docs=>{
+            let userid=req.isAuthenticated()
+            res.render('edit.html',{club:docs,userid,user:req.user,readQuery})
+        })
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/edit/:id",async (req,res)=>{
-    readQuery=req.params.id
-    const user= await User.findOneAndUpdate({'liveTable':{$elemMatch:{'itemname':readQuery}}},{
-        $set:{
-            'liveTable.$.itemname':req.body.item,
-            'liveTable.$.price':req.body.price
-        },
-        $unset:{
-            lostItem: req.user.lostItem,
-            realRemPrice: req.user.realRemPrice
-        }
-    }).then(docs=>{
-        console.log("Item edited successfully!");
-        res.redirect('/');
-    })
+    let readQuery=req.params.id
+    try{
+        const user= await User.findOneAndUpdate({'liveTable':{$elemMatch:{'itemname':readQuery}}},{
+            $set:{
+                'liveTable.$.itemname':req.body.item,
+                'liveTable.$.price':req.body.price
+            },
+            $unset:{
+                lostItem: req.user.lostItem,
+                realRemPrice: req.user.realRemPrice
+            }
+        }).then(docs=>{
+            console.log("Item edited successfully!");
+            res.redirect('/');
+        })
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/deleteItem/:id", async (req,res)=>{
     let readQuery=req.params.id
-    const user= await User.updateOne({username:req.user.username},{
-        $pull:{
-            liveTable: {
-                itemname: readQuery
+    try{
+        const user= await User.updateOne({username:req.user.username},{
+            $pull:{
+                liveTable: {
+                    itemname: readQuery
+                }
             }
-        }
-    })
-    console.log("Item deleted successfully!")
-    return res.redirect('/');
+        })
+        console.log("Item deleted successfully!")
+        return res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/save", async (req,res)=>{
-    const user= await User.updateOne({username: req.user.username},{
-        $push:{
-            billlist:{
-                createdDate: new Date(),
-                totalAmount: req.user.totalAmount,
-                spentPrice: req.body.spentPrice,
-                remPrice: req.body.remPrice,
-                itemlist: req.user.liveTable,
+    try{
+        const user= await User.updateOne({username: req.user.username},{
+            $push:{
+                billlist:{
+                    createdDate: new Date(),
+                    totalAmount: req.user.totalAmount,
+                    spentPrice: req.body.spentPrice,
+                    remPrice: req.body.remPrice,
+                    itemlist: req.user.liveTable,
+                }
             }
-        }
-    })
-    console.log("Your bill saved successfully!")
-    res.redirect('/');
+        })
+        console.log("Your bill saved successfully!")
+        res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.post("/help", async (req,res)=>{
-    const user= await User.updateOne({username: req.user.username},{
-        lostItem: req.body.lostItem,
-        realRemPrice: req.body.realRemPrice
-    })
-    console.log('Your information collected successfully!')
-    res.redirect('/');
+    try{
+        const user= await User.updateOne({username: req.user.username},{
+            lostItem: req.body.lostItem,
+            realRemPrice: req.body.realRemPrice
+        })
+        console.log('Your information collected successfully!')
+        res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/clearFields", async (req,res)=>{
-    const user= await User.updateOne({username: req.user.username},{
-        $unset:{
-            lostItem: req.user.lostItem,
-            realRemPrice: req.user.realRemPrice
-        }
-    })
-    console.log('Item name and actual remaining amount fields cleared successfully!')
-    res.redirect('/');
+    try{
+        const user= await User.updateOne({username: req.user.username},{
+            $unset:{
+                lostItem: req.user.lostItem,
+                realRemPrice: req.user.realRemPrice
+            }
+        })
+        console.log('Item name and actual remaining amount fields cleared successfully!')
+        res.redirect('/');
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/history",(req,res)=>{
     let userid=req.isAuthenticated()
-    res.status(200).render('history.html',{userid,user:req.user})
+    try{
+        res.status(200).render('history.html',{userid,user:req.user})
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/view/:id", async (req,res)=>{
     let readQuery=req.params.id
     let userid=req.isAuthenticated()
-    res.status(200).render('bills.html',{userid,user:req.user,readQuery})
+    try{
+        res.status(200).render('bills.html',{userid,user:req.user,readQuery})
+    }catch(error){
+        console.log(error)
+    }
 });
 app.get("/deleteBill/:id", async (req,res)=>{
     let readQuery=req.params.id
-    const user= await User.updateOne({username:req.user.username},{
-        $pull:{
-            billlist: {
-                _id: readQuery
+    try{
+        const user= await User.updateOne({username:req.user.username},{
+            $pull:{
+                billlist: {
+                    _id: readQuery
+                }
             }
-        }
-    })
-    console.log('Your saved bill deleted successfully!')
-    return res.redirect('/history');
+        })
+        console.log('Your saved bill deleted successfully!')
+        return res.redirect('/history');
+    }catch(error){
+        console.log(error)
+    }
 });
 // Start the server
 connectDB().then(()=>{
@@ -238,6 +296,3 @@ connectDB().then(()=>{
         console.log(`The application started successfully!`)
     })
 })
-// app.listen(port,()=>{
-//     console.log(`The application started successfully!`)
-// })
