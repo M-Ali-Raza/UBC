@@ -293,6 +293,6 @@ app.get("/deleteBill/:id", async (req,res)=>{
 // Start the server
 connectDB().then(()=>{
     app.listen(port,()=>{
-        console.log(`The application started successfully!`)
+        console.log(`The application started successfully! ${port}`)
     })
 })
