@@ -58,7 +58,6 @@ app.get("/",(req,res)=>{
         'Access-control-Allow-Origin':'*'
     });
     let userid=req.isAuthenticated()
-    console.log(req.user)
     try{
         res.status(200).render('index.html',{
             userid,user:req.user
@@ -83,7 +82,7 @@ app.post("/signup",async (req,res)=>{
             return res.redirect('/')
         }
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/login",async (req,res)=>{
@@ -105,7 +104,7 @@ app.post("/login",async (req,res)=>{
           res.status(400).json({ error: "User doesn't exist" });
         }
     }catch (error) {
-        res.status(400).json({ error });
+        console.log(req.user)
     }
 });
 app.get("/logout", function (req, res) {
@@ -116,7 +115,7 @@ app.get("/logout", function (req, res) {
             res.redirect('/');
         });
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/deleteAccount", async (req,res)=>{
@@ -130,7 +129,7 @@ app.post("/deleteAccount", async (req,res)=>{
             res.status(400).json({error:"Invalid username"})
         }
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/addAmount", async (req,res)=>{
@@ -141,7 +140,7 @@ app.post("/addAmount", async (req,res)=>{
         console.log("Total amount added successfully!");
         res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/addItems", async (req,res)=>{
@@ -161,7 +160,7 @@ app.post("/addItems", async (req,res)=>{
         console.log("Item added successfully!");
         return res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/edit/:id",async (req,res)=>{
@@ -181,7 +180,7 @@ app.get("/edit/:id",async (req,res)=>{
             res.render('edit.html',{club:docs,userid,user:req.user,readQuery})
         })
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/edit/:id",async (req,res)=>{
@@ -201,7 +200,7 @@ app.post("/edit/:id",async (req,res)=>{
             res.redirect('/');
         })
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/deleteItem/:id", async (req,res)=>{
@@ -217,7 +216,7 @@ app.get("/deleteItem/:id", async (req,res)=>{
         console.log("Item deleted successfully!")
         return res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/save", async (req,res)=>{
@@ -237,7 +236,7 @@ app.post("/save", async (req,res)=>{
         console.log("Your bill saved successfully!")
         res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.post("/help", async (req,res)=>{
@@ -249,7 +248,7 @@ app.post("/help", async (req,res)=>{
         console.log('Your information collected successfully!')
         res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/clearFields", async (req,res)=>{
@@ -263,7 +262,7 @@ app.get("/clearFields", async (req,res)=>{
         console.log('Item name and actual remaining amount fields cleared successfully!')
         res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/history",(req,res)=>{
@@ -271,7 +270,7 @@ app.get("/history",(req,res)=>{
     try{
         res.status(200).render('history.html',{userid,user:req.user})
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/view/:id", async (req,res)=>{
@@ -280,7 +279,7 @@ app.get("/view/:id", async (req,res)=>{
     try{
         res.status(200).render('bills.html',{userid,user:req.user,readQuery})
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 app.get("/deleteBill/:id", async (req,res)=>{
@@ -296,7 +295,7 @@ app.get("/deleteBill/:id", async (req,res)=>{
         console.log('Your saved bill deleted successfully!')
         return res.redirect('/history');
     }catch(error){
-        console.log(error)
+        console.log(req.user)
     }
 });
 // Start the server
