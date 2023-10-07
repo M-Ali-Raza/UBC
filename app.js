@@ -220,6 +220,7 @@ app.get("/deleteItem/:id", async (req,res)=>{
     }
 });
 app.post("/save", async (req,res)=>{
+    console.log(req.user.username)
     try{
         const user= await User.updateOne({username: req.user.username},{
             $push:{
