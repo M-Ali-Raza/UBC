@@ -225,6 +225,7 @@ app.post("/save", async (req,res)=>{
                 }
             }
         })
+        console.log(req.user.username)
         console.log("Your bill saved successfully!")
         res.redirect('/');
     }catch(error){
