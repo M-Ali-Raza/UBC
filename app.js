@@ -58,6 +58,7 @@ app.get("/",(req,res)=>{
         'Access-control-Allow-Origin':'*'
     });
     let userid=req.isAuthenticated()
+    console.log(req.user)
     try{
         res.status(200).render('index.html',{
             userid,user:req.user
@@ -220,7 +221,6 @@ app.get("/deleteItem/:id", async (req,res)=>{
     }
 });
 app.post("/save", async (req,res)=>{
-    console.log(req.user.username)
     try{
         const user= await User.updateOne({username: req.user.username},{
             $push:{
