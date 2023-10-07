@@ -10,17 +10,27 @@ var passport=require("passport");
 var LocalStrategy=require("passport-local");
 const User=require("./models/User");
 // Connect our server with mongo-DB using mongoose
-const connectDB=async()=>{
-    try{
-        mongoose.connect(process.env.SECRET);
-        var db=await mongoose.connection;
-        db.on('error',console.error.bind(console,'connection error:'));
-        db.once('open',function(){
-            console.log("We connect with database successfully!");
-        });
-    }catch(error){
-        console.log(error)
-    }
+// const connectDB=async()=>{
+//     try{
+//         mongoose.connect(process.env.SECRET);
+//         var db=await mongoose.connection;
+//         db.on('error',console.error.bind(console,'connection error:'));
+//         db.once('open',function(){
+//             console.log("We connect with database successfully!");
+//         });
+//     }catch(error){
+//         console.log(error)
+//     }
+// }
+try{
+    mongoose.connect(process.env.SECRET);
+    var db= mongoose.connection;
+    db.on('error',console.error.bind(console,'connection error:'));
+    db.once('open',function(){
+        console.log("We connect with database successfully!");
+    });
+}catch(error){
+    console.log(error)
 }
 // Middlewares
 app.use(bodyParser.json());
@@ -225,7 +235,7 @@ app.post("/save", async (req,res)=>{
                 }
             }
         })
-        console.log(req.user.username)
+        // console.log(req.body.username)
         console.log("Your bill saved successfully!")
         res.redirect('/');
     }catch(error){
@@ -292,8 +302,11 @@ app.get("/deleteBill/:id", async (req,res)=>{
     }
 });
 // Start the server
-connectDB().then(()=>{
-    app.listen(port,()=>{
-        console.log(`The application started successfully! ${port}`)
-    })
+// connectDB().then(()=>{
+//     app.listen(port,()=>{
+//         console.log(`The application started successfully! ${port}`)
+//     })
+// })
+app.listen(port,()=>{
+    console.log(`The application started successfully! ${port}`)
 })
