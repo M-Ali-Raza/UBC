@@ -134,7 +134,7 @@ app.post("/deleteAccount", async (req,res)=>{
 });
 app.post("/addAmount", async (req,res)=>{
     try{
-        const user= await User.updateOne({username:req.user.username},{
+        const user= await User.findOneAndUpdate({username:req.user.username},{
             totalAmount: req.body.amount
         })
         console.log("Total amount added successfully!");
