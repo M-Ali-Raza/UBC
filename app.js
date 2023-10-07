@@ -10,27 +10,24 @@ var passport=require("passport");
 var LocalStrategy=require("passport-local");
 const User=require("./models/User");
 // Connect our server with mongo-DB using mongoose
-// const connectDB=async()=>{
-//     try{
-//         mongoose.connect(process.env.SECRET);
-//         var db=await mongoose.connection;
-//         db.on('error',console.error.bind(console,'connection error:'));
-//         db.once('open',function(){
-//             console.log("We connect with database successfully!");
-//         });
-//     }catch(error){
-//         console.log(error)
-//     }
-// }
-try{
-    mongoose.connect(process.env.SECRET);
-    var db= mongoose.connection;
-    db.on('error',console.error.bind(console,'connection error:'));
-    db.once('open',function(){
-        console.log("We connect with database successfully!");
-    });
-}catch(error){
-    console.log(error)
+const connectDB=async()=>{
+    // try{
+    //     mongoose.connect(process.env.SECRET);
+    //     var db=await mongoose.connection;
+    //     db.on('error',console.error.bind(console,'connection error:'));
+    //     db.once('open',function(){
+    //         console.log("We connect with database successfully!");
+    //     });
+    // }catch(error){
+    //     console.log(error)
+    // }
+    try {
+        const conn = await mongoose.connect(process.env.SECRET);
+        console.log(`We connect with database successfully!`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
 }
 // Middlewares
 app.use(bodyParser.json());
@@ -302,11 +299,8 @@ app.get("/deleteBill/:id", async (req,res)=>{
     }
 });
 // Start the server
-// connectDB().then(()=>{
-//     app.listen(port,()=>{
-//         console.log(`The application started successfully! ${port}`)
-//     })
-// })
-app.listen(port,()=>{
-    console.log(`The application started successfully! ${port}`)
+connectDB().then(()=>{
+    app.listen(port,()=>{
+        console.log(`The application started successfully!`)
+    })
 })
