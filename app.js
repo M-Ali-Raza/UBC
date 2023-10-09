@@ -138,7 +138,7 @@ app.post("/addAmount", async (req,res)=>{
         // if(findUser){
         //     await User.updateOne({findUser.username},{})
         // }
-        const user= await User.updateOne({username:req.user.username},{
+        const user= await User.updateOne({"username":req.user.username},{
             totalAmount: req.body.amount
         })
         console.log("Total amount added successfully!");
