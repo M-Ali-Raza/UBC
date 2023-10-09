@@ -138,9 +138,9 @@ app.post("/addAmount", async (req,res)=>{
         // if(findUser){
         //     await User.updateOne({findUser.username},{})
         // }
-        const user= await User.findByIdAndUpdate(req.user.id,{
+        const user= await User.updateOne({username:req.user.username},{
             totalAmount: req.body.amount
-        },{new: true})
+        })
         console.log("Total amount added successfully!");
         res.redirect('/');
     }catch(error){
