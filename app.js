@@ -135,13 +135,16 @@ app.post("/deleteAccount", async (req,res)=>{
 app.post("/addAmount", async (req,res)=>{
     try{
         // const findUser= await User.findOne({username:req.user.username})
-        const user= await User.findOneAndUpdate({username:req.user.username},{
+        // if(findUser){
+        //     await User.updateOne({findUser.username},{})
+        // }
+        const user= await User.findByIdAndUpdate(req.user,{
             totalAmount: req.body.amount
-        })
+        },{new: true})
         console.log("Total amount added successfully!");
         res.redirect('/');
     }catch(error){
-        console.log(req.user)
+        console.log(error)
     }
 });
 app.post("/addItems", async (req,res)=>{
