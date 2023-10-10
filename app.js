@@ -146,7 +146,7 @@ app.post("/addAmount", async (req,res)=>{
         console.log("Total amount added successfully!");
         return res.redirect('/');
     }catch(error){
-        console.log(error)
+        console.log(req)
     }
 });
 app.post("/addItems", async (req,res)=>{
