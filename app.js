@@ -7,7 +7,8 @@ const bcrypt = require('bcrypt');
 var mongoose=require("mongoose");
 var bodyParser=require("body-parser");
 var passport=require("passport");
-var LocalStrategy=require("passport-local");
+var session=require("express-session")
+var LocalStrategy=require("passport-local").Strategy;
 const User=require("./models/User");
 // Connect our server with mongo-DB using mongoose
 const connectDB=async()=>{
@@ -34,11 +35,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended:true
 }));
-app.use(require("express-session")({
-    secret:"login to account",
-    resave: false,
-    saveUninitialized: false
-}));
+// app.use(require("express-session")({
+//     secret:"secret",
+//     resave: false,
+//     saveUninitialized: true
+// }));
+app.use(session({
+    secret: "secret",
+    resave: false ,
+    saveUninitialized: true ,
+}))
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -134,11 +140,7 @@ app.post("/deleteAccount", async (req,res)=>{
 });
 app.post("/addAmount", async (req,res)=>{
     try{
-        // const findUser= await User.findOne({username:req.user.username})
-        // if(findUser){
-        //     await User.updateOne({findUser.username},{})
-        // }
-        const user= await User.updateOne({"username":req.user.username},{
+        const user= await User.updateOne({username:req.user.username},{
             totalAmount: req.body.amount
         })
         console.log("Total amount added successfully!");
