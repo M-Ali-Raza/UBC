@@ -100,7 +100,7 @@ app.post("/login",async (req,res)=>{
                req.login(user, function(error) {
                    if (error) return next(error);
                    console.log("We login successfully!");
-                   res.redirect("/");
+                   return res.redirect("/");
                });
              } 
           else {
@@ -110,7 +110,7 @@ app.post("/login",async (req,res)=>{
           res.status(400).json({ error: "User doesn't exist" });
         }
     }catch (error) {
-        console.log(req.user)
+        console.log(error)
     }
 });
 app.get("/logout", function (req, res) {
@@ -118,7 +118,7 @@ app.get("/logout", function (req, res) {
         req.logout(function(err) {
             if (err) { return next(err); }
             console.log("We logout successfully!");
-            res.redirect('/');
+            return res.redirect('/');
         });
     }catch(error){
         console.log(req.user)
@@ -129,7 +129,7 @@ app.post("/deleteAccount", async (req,res)=>{
         if(req.body.username===req.user.username){
             const user= await User.deleteOne({username:req.user.username});
             console.log("Your account deleted successfully!")
-            res.redirect('/');
+            return res.redirect('/');
         }
         else{
             res.status(400).json({error:"Invalid username"})
@@ -144,7 +144,7 @@ app.post("/addAmount", async (req,res)=>{
             totalAmount: req.body.amount
         })
         console.log("Total amount added successfully!");
-        res.redirect('/');
+        return res.redirect('/');
     }catch(error){
         console.log(error)
     }
@@ -203,7 +203,7 @@ app.post("/edit/:id",async (req,res)=>{
             }
         }).then(docs=>{
             console.log("Item edited successfully!");
-            res.redirect('/');
+            return res.redirect('/');
         })
     }catch(error){
         console.log(req.user)
@@ -240,7 +240,7 @@ app.post("/save", async (req,res)=>{
         })
         // console.log(req.body.username)
         console.log("Your bill saved successfully!")
-        res.redirect('/');
+        return res.redirect('/');
     }catch(error){
         console.log(req.user)
     }
@@ -252,7 +252,7 @@ app.post("/help", async (req,res)=>{
             realRemPrice: req.body.realRemPrice
         })
         console.log('Your information collected successfully!')
-        res.redirect('/');
+        return res.redirect('/');
     }catch(error){
         console.log(req.user)
     }
@@ -266,7 +266,7 @@ app.get("/clearFields", async (req,res)=>{
             }
         })
         console.log('Item name and actual remaining amount fields cleared successfully!')
-        res.redirect('/');
+        return res.redirect('/');
     }catch(error){
         console.log(req.user)
     }
