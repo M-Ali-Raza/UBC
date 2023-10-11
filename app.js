@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express=require("express");
+const jwt = require('jsonwebtoken'); 
 const path=require("path");
 const app=express();
 const port=process.env.PORT || 3000;
@@ -31,6 +32,35 @@ const connectDB=async()=>{
     }
 }
 // Middlewares
+app.use( (req, res, next) => {
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
+        try {
+            const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.TOKEN_KEY);
+            req.user = decoded;
+          } catch (err) {
+            return res.status(401).send("Invalid Token");
+          //   console.log(err)
+          }
+          return next();
+    }else{
+        req.user=undefined
+        return next()
+    }
+    // if (!token) {
+    // //   return res.status(403).send("A token is required for authentication");
+    //     return null
+    // }
+    // // const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    // // req.user = decoded;
+    // try {
+    //   const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+    //   req.user = decoded;
+    // } catch (err) {
+    //   return res.status(401).send("Invalid Token");
+    // //   console.log(err)
+    // }
+    // return next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended:true
@@ -84,11 +114,19 @@ app.post("/signup",async (req,res)=>{
                 username: req.body.username,
                 password: hashedpassword,
             });
+            // const token = jwt.sign(
+            //     { user_id: user._id, username: user.username },
+            //     process.env.TOKEN_KEY,
+            //     {
+            //       expiresIn: "2h",
+            //     }
+            // );
+            // user.token=token
             console.log("Account is created successfully!")
             return res.redirect('/')
         }
     }catch(error){
-        console.log(req.user)
+        console.log(error)
     }
 });
 app.post("/login",async (req,res)=>{
@@ -102,6 +140,16 @@ app.post("/login",async (req,res)=>{
                    console.log("We login successfully!");
                    return res.redirect("/");
                });
+            const token = jwt.sign(
+                { user_id: user._id, username: user.username },
+                process.env.TOKEN_KEY,
+                {
+                  expiresIn: "2h",
+                }
+              );
+        
+              // save user token
+              user.token = token;
              } 
           else {
             res.status(400).json({ error: "password doesn't match" });
@@ -146,7 +194,7 @@ app.post("/addAmount", async (req,res)=>{
         console.log("Total amount added successfully!");
         return res.redirect('/');
     }catch(error){
-        console.log(req)
+        console.log(error)
     }
 });
 app.post("/addItems", async (req,res)=>{

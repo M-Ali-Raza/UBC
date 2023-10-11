@@ -5,8 +5,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 var Item = new Schema({
     itemname: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     price: {
         type: Number,
@@ -42,7 +41,6 @@ var Table =new Schema({
     itemname: {
         type: String,
         required: true,
-        unique: true
     },
     price: {
         type: Number,
@@ -77,7 +75,11 @@ var User = new Schema({
         required: true,
         default: 0
     },
-    billlist: [Bill]
+    billlist: [Bill],
+    token:{
+        type: String,
+        default:0
+    }
 }) 
 User.plugin(passportLocalMongoose); 
 module.exports = mongoose.model('User', User)

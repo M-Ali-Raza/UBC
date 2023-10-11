@@ -156,9 +156,13 @@ if(amount){
         if(key!=="Enter"){
             if(add_btn){
                 window.removeEventListener("click",clickHandler)
+                add_btn.classList.add("disable-btn")
             }
-            add_btn.classList.add("disable-btn")
-            help_btn.classList.add("disable-help")
+            // add_btn.classList.add("disable-btn")
+            if(help_btn){
+                help_btn.classList.add("disable-help")
+            }
+            // help_btn.classList.add("disable-help")
         }
     })
 }
