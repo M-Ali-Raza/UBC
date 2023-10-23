@@ -81,8 +81,8 @@ module.exports.delAccount_Post=async (req,res)=>{
 module.exports.addAmount_Post=async (req,res)=>{
     try{
         // const isUser= await User.findOne({id:req.params.id})
-        const {id}=req.params.id
-        const user= await User.findOneAndUpdate({id},{
+        // const {id}=req.params.id
+        const user= await User.updateOne({id:req.params.id},{
             totalAmount: req.body.amount
         },{new:true})
         // console.log(user)
