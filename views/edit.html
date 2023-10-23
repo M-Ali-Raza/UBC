@@ -35,7 +35,7 @@
     <!-- Navbar Section -->
     
     <div class="navbar">
-        <% if(userid == false){ %>
+        <% if(!user){ %>
         <span class="nav-btn account">Create Account</span>
         <span class="nav-btn login">Log In</span>
         <% }else{ %>
@@ -58,7 +58,7 @@
     
     <form action="/addAmount" method="post" class="amount-box">
         <label for="amount" class="font">Total Amount : </label>
-        <% if(userid == false){ %>
+        <% if(!user){ %>
         <input type="number" name="amount" id="amount" readonly placeholder="Please login first!">
         <% }else{ %>
         <% if(user.totalAmount === 0 || user.totalAmount === null){ %>
@@ -71,7 +71,7 @@
     
     <!-- Table Section -->
 
-    <% if(userid == true){ %>
+    <% if(user){ %>
     <% if(user.liveTable.length!=0){ %>
     <table class="top">
         <% user.liveTable.forEach((y)=>{ %>
@@ -101,7 +101,7 @@
 
     <!-- Spent Amount and Remaining Amount Section -->
 
-    <% if(userid==true){ %>
+    <% if(user){ %>
     <% let sum=0 %>
     <% user.liveTable.forEach((y)=>{ %>
     <% sum+=y.price %>
@@ -153,7 +153,6 @@
         <span class="nav-btn disable-help">Helping Tool <span class="material-symbols-outlined more">Expand_More</span></span>
         <% }else{ %>
         <% let sum=0 %>
-        <% let currentSum=0 %>
         <% user.liveTable.forEach((y)=>{ %>
         <% sum+=y.price %>
         <% }) %>
@@ -164,7 +163,6 @@
         <% }else{ %>
         <% if(user.lostItem!='' && user.lostItem!=0 && user.realRemPrice!=null &&user.realRemPrice!=0 && user.liveTable.length!=0){ %>
         <a href="/clearFields" class="nav-btn">Helping Tool <span class="material-symbols-outlined more">Expand_Less</span></a>
-        <% currentSum=sum %>
         <% }else{ %>
         <span class="nav-btn help-btn">Helping Tool <span class="material-symbols-outlined more">Expand_More</span></span>
         <% } %>
@@ -206,7 +204,7 @@
 
             <!-- Delete Account Button -->
 
-            <% if(userid==true){ %>
+            <% if(user){ %>
             <div class="delete-box">
                 <div class="delete-btn">Delete My Account</div>
             </div>
@@ -228,7 +226,7 @@
                     <button type="submit" class="calculate-btn">Calculate</button>
                 </form>
             </div>
-            <% if(userid==true){ %>
+            <% if(user){ %>
             <div class="delete-box">
                 <div class="delete-btn">Delete My Account</div>
             </div>
@@ -247,7 +245,7 @@
 
     <div class="container signup_container">
         <div class="modal">
-            <form onsubmit=" return matchPassword()" action="/signup" method="post" class="note">
+            <form onsubmit=" return matchPassword()" action="/signup" method="post" class="note signup_form">
                 <h3>Create Account</h3>
                 <div class="cover">
                     <label for="email" class="lable1">Username:</label>
@@ -273,7 +271,7 @@
 
     <div class="container login_container">
         <div class="modal">
-            <form action="/login" method="post" class="note">
+            <form action="/login" method="post" class="note login_form">
                 <h3>Log In</h3>
                 <div class="cover">
                     <label for="email2" class="lable1">Username:</label>
@@ -298,7 +296,7 @@
             <form action="/deleteAccount" method="post" class="note">
                 <h3>Delete Account Confrmation</h3>
                 <div class="cover delCover">
-                    <% if(userid==true){ %>
+                    <% if(user){ %>
                     <label for="email2" class="lable1">Retype <strong>"<%= user.username %>"</strong> to delete your account :</label>
                     <% } %>
                     <input type="text" name="username" id="email3" class="add-text" placeholder="Enter your Username" required>
@@ -337,7 +335,7 @@
 
     <div class="container edit_container">
         <div class="modal">
-            <% if(userid == true){ %>   
+            <% if(user){ %>   
             <% let index=user.liveTable.map(obj=>obj.itemname).indexOf(readQuery) %>
             <form action="/edit/<%= user.liveTable[index].itemname %>" method="post" class="note">
                 <h3>Edit Price</h3>

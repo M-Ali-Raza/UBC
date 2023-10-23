@@ -33,7 +33,7 @@
 
     <!-- Save Date And Time Section -->
 
-    <% if(userid == true){ %>
+    <% if(user){ %>
     <% let index=user.billlist.map(obj=>obj.id).indexOf(readQuery) %>
     <% user.billlist[index].createdDate %>
     <% let months=['January','Faburary','March','April','May','June','July','August','September','October','November','December'] %>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const passportLocalMongoose = require('passport-local-mongoose');
+const bcrypt = require('bcrypt');
 // Create an array of object to save stored item name and price
 var Item = new Schema({
     itemname: {
@@ -49,7 +49,7 @@ var Table =new Schema({
     }
 })
 // Create a main collection to store all data used in UBC
-var User = new Schema({
+var UserSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -75,11 +75,25 @@ var User = new Schema({
         required: true,
         default: 0
     },
-    billlist: [Bill],
-    token:{
-        type: String,
-        default:0
-    }
+    billlist: [Bill]
 }) 
-User.plugin(passportLocalMongoose); 
-module.exports = mongoose.model('User', User)
+// fire a function before saving data in database
+UserSchema.pre('save', async function(next){
+    const salt= await bcrypt.genSalt()
+    this.password= await bcrypt.hash(this.password, salt)
+    next()
+})
+// static method to login user
+// UserSchema.statics.login= async function(username,password){
+//     const user= await this.findOne({username})
+//     if(user){
+//         const auth= await bcrypt.compare(password,user.password)
+//         if(auth){
+//             return user
+//         }
+//         // Error: 
+//     }
+//     // console.log("User doesn't exist")
+// }
+const User=mongoose.model('User',UserSchema)
+module.exports=User
