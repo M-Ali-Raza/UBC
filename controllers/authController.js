@@ -31,8 +31,6 @@ module.exports.signup_Post=async (req,res)=>{
 module.exports.login_Post=async (req,res)=>{
     const {username,password}=req.body
     try{
-        // const user= await User.login(username,password)
-        // const isUser= await User.findOne({id:req.params.id})
         const user= await User.findOne({username})
         if(user){
             const auth= await bcrypt.compare(password,user.password)
@@ -47,10 +45,6 @@ module.exports.login_Post=async (req,res)=>{
         }else{
             res.status(400).json({error:"User doesn't exist!"})
         }
-        // const token=createToken(user._id)
-        // res.cookie('jwt',token,{httpOnly:true,maxAge:maxAge*1000})
-        // console.log('We login successfully!')
-        // res.redirect('/')
     }catch(error){
         console.log(error)
     }
@@ -80,12 +74,10 @@ module.exports.delAccount_Post=async (req,res)=>{
 
 module.exports.addAmount_Post=async (req,res)=>{
     try{
-        // const isUser= await User.findOne({id:req.params.id})
-        // const {id}=req.params.id
-        const user= await User.updateOne({id:req.params.id},{
-            totalAmount: req.body.amount
-        },{new:true})
-        // console.log(user)
+        const userId= await User.findOne(req.user)
+        const user= await User.updateOne({_id:req.user},{
+            $set:{totalAmount: req.body.amount}
+        })
         console.log("Total amount added successfully!");
         return res.redirect('/');
     }catch(error){
@@ -95,8 +87,8 @@ module.exports.addAmount_Post=async (req,res)=>{
 
 module.exports.addItems_Post=async (req,res)=>{
     try{
-        const isUser= await User.findOne({id:req.params.id})
-        const user= await User.updateOne({id:req.params.id},{
+        const isUser= await User.findOne(req.user)
+        const user= await User.updateOne({_id:req.user},{
             $push:{
                 liveTable: {
                     itemname: req.body.item,
@@ -177,8 +169,9 @@ module.exports.delItem_Get=async (req,res)=>{
 
 module.exports.save_Post=async (req,res)=>{
     try{
-        const isUser= await User.findOne({id:req.params.id})
-        const user= await User.updateOne({id:req.params.id},{
+        const isUser=res.locals.user
+        const userId= await User.findOne(req.user)
+        const user= await User.updateOne({_id:req.user},{
             $push:{
                 billlist:{
                     createdDate: new Date(),
@@ -198,11 +191,12 @@ module.exports.save_Post=async (req,res)=>{
 
 module.exports.help_Post=async (req,res)=>{
     try{
-        const user= await User.updateOne({id:req.params.id},{
+        const isUser= await User.findOne(req.user)
+        const user= await User.updateOne({_id:req.user},{
             lostItem: req.body.lostItem,
             realRemPrice: req.body.realRemPrice
         })
-        console.log('Your information collected successfully!')
+        console.log('Your item price calculated successfully!')
         return res.redirect('/');
     }catch(error){
         console.log(error)
@@ -211,8 +205,8 @@ module.exports.help_Post=async (req,res)=>{
 
 module.exports.clear_Get=async (req,res)=>{
     try{
-        const isUser= await User.findOne({id:req.params.id})
-        const user= await User.updateOne({id:req.params.id},{
+        const isUser= await User.findOne(req.user)
+        const user= await User.updateOne({_id:req.user},{
             $unset:{
                 lostItem: isUser.lostItem,
                 realRemPrice: isUser.realRemPrice

@@ -7,7 +7,7 @@ const mongoose=require('mongoose');
 const authRoutes=require('./routes/authRoutes')
 const cookieParser=require('cookie-parser')
 const {requireAuth,checkUser}=require('./middlewares/authmiddlewares')
-// // Middlewares
+// Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())

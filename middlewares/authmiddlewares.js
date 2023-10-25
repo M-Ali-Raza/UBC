@@ -13,7 +13,6 @@ const requireAuth=(req,res,next)=>{
             }else{
                 let user= await User.findById(decodedToken.id)
                 res.locals.user=user
-                // next()
                 req.user=decodedToken.id
             }
         })
@@ -36,7 +35,6 @@ const checkUser=(req,res,next)=>{
             }else{
                 let user= await User.findById(decodedToken.id)
                 res.locals.user=user
-                // req.user=decodedToken.id
                 next()
             }
         })

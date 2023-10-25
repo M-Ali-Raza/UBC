@@ -158,11 +158,9 @@ if(amount){
                 window.removeEventListener("click",clickHandler)
                 add_btn.classList.add("disable-btn")
             }
-            // add_btn.classList.add("disable-btn")
             if(help_btn){
                 help_btn.classList.add("disable-help")
             }
-            // help_btn.classList.add("disable-help")
         }
     })
 }
