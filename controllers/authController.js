@@ -58,7 +58,8 @@ module.exports.logout_Get=async (req,res)=>{
 
 module.exports.delAccount_Post=async (req,res)=>{
     try{
-        const isUser= await User.findOne({id:req.params.id})
+        const userId= await User.findOne(req.user)
+        const isUser= await User.findOne({_id:req.user})
         if(req.body.username===isUser.username){
             const user= await User.deleteOne({username:isUser.username});
             console.log("Your account deleted successfully!")
@@ -87,7 +88,8 @@ module.exports.addAmount_Post=async (req,res)=>{
 
 module.exports.addItems_Post=async (req,res)=>{
     try{
-        const isUser= await User.findOne(req.user)
+        const userId= await User.findOne(req.user)
+        const isUser= await User.findOne({_id:req.user})
         const user= await User.updateOne({_id:req.user},{
             $push:{
                 liveTable: {
@@ -169,8 +171,8 @@ module.exports.delItem_Get=async (req,res)=>{
 
 module.exports.save_Post=async (req,res)=>{
     try{
-        const isUser=res.locals.user
         const userId= await User.findOne(req.user)
+        const isUser= await User.findOne({_id:req.user})
         const user= await User.updateOne({_id:req.user},{
             $push:{
                 billlist:{
@@ -205,7 +207,8 @@ module.exports.help_Post=async (req,res)=>{
 
 module.exports.clear_Get=async (req,res)=>{
     try{
-        const isUser= await User.findOne(req.user)
+        const userId= await User.findOne(req.user)
+        const isUser= await User.findOne({_id:req.user})
         const user= await User.updateOne({_id:req.user},{
             $unset:{
                 lostItem: isUser.lostItem,
